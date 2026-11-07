@@ -124,6 +124,9 @@ function openPage(){
   Lampa.Activity.push({url:'',title:T('title'),component:'ne_page',page:1});
 }
 
+/* Navigator у різних збірках Lampa — або глобальний, або Lampa.Navigator */
+function nav(){return window.Navigator||(window.Lampa&&Lampa.Navigator)||null}
+
 /* ---------- сторінка «Нові серії» ---------- */
 function Page(object){
   var scroll=new Lampa.Scroll({mask:true,over:true,step:250}),html=$('<div></div>'),body=$('<div class="category-full"></div>'),last,self=this;
@@ -158,10 +161,10 @@ function Page(object){
     if(Lampa.Activity.active().activity!==self.activity)return;
     Lampa.Controller.add('ne_page',{
       toggle:function(){Lampa.Controller.collectionSet(scroll.render());Lampa.Controller.collectionFocus(last||false,scroll.render())},
-      left:function(){if(Lampa.Navigator.canmove('left'))Lampa.Navigator.move('left');else Lampa.Controller.toggle('menu')},
-      right:function(){Lampa.Navigator.move('right')},
-      up:function(){if(Lampa.Navigator.canmove('up'))Lampa.Navigator.move('up');else Lampa.Controller.toggle('head')},
-      down:function(){if(Lampa.Navigator.canmove('down'))Lampa.Navigator.move('down')},
+      left:function(){var N=nav();if(N&&N.canmove('left'))N.move('left');else Lampa.Controller.toggle('menu')},
+      right:function(){var N=nav();if(N&&N.canmove('right'))N.move('right')},
+      up:function(){var N=nav();if(N&&N.canmove('up'))N.move('up');else Lampa.Controller.toggle('head')},
+      down:function(){var N=nav();if(N&&N.canmove('down'))N.move('down')},
       back:function(){Lampa.Activity.backward()}
     });
     Lampa.Controller.toggle('ne_page');
